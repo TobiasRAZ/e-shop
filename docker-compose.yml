@@ -1,0 +1,35 @@
+version: '3.3'
+
+services:
+  nginx:
+    build: ./docker/nginx
+    volumes:
+    - ./:/var/www/symfony
+    ports:
+    - 8081:80
+    depends_on:
+      - php-fpm
+    networks:
+      - symfony
+
+  php-fpm:
+    build: ./docker/php-fpm
+    volumes:
+    - ./:/var/www/symfony
+    networks:
+      - symfony
+
+  mysql:
+    image: mariadb:10.1
+    environment:
+        MYSQL_ROOT_PASSWORD: e-shop
+        MYSQL_DATABASE: e-shop
+        MYSQL_USER: e-shop
+        MYSQL_PASSWORD: e-shop
+    ports:
+        - 3306:3306
+    networks:
+      - symfony
+
+networks:
+  symfony: ~
